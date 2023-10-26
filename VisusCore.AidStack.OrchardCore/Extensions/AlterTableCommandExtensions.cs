@@ -12,7 +12,17 @@ public static class AlterTableCommandExtensions
         Expression<Func<TModel, TProperty>> expression,
         Action<IAddColumnCommand> configure = null)
     {
-        var name = ((MemberExpression)expression.Body).Member.Name;
+        if (expression is null)
+        {
+            throw new ArgumentNullException(nameof(expression));
+        }
+
+        if (table is null)
+        {
+            throw new ArgumentNullException(nameof(table));
+        }
+
+        var name = (expression.Body as MemberExpression).Member.Name;
 
         table.AddColumn(name, typeof(TProperty), configure);
 

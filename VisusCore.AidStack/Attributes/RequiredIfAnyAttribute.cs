@@ -11,7 +11,7 @@ public sealed class RequiredIfAttribute<TValue> : ValidationAttribute
 
     protected override ValidationResult IsValid(object value, ValidationContext validationContext)
     {
-        var model = validationContext.ObjectInstance;
+        var model = validationContext?.ObjectInstance;
         if (model == null)
         {
             return ValidationResult.Success;

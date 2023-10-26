@@ -11,7 +11,7 @@ public static class SchemaBuilderExtensions
         this ISchemaBuilder builder,
         Action<ICreateTableCommand<TModel>> table,
         string collection = null) =>
-        builder.CreateMapIndexTable(
+        builder?.CreateMapIndexTable(
             typeof(TModel),
             tableCommand => table?.Invoke(new CreateTableCommandShim<TModel>(tableCommand)),
             collection);
@@ -19,14 +19,14 @@ public static class SchemaBuilderExtensions
     public static ISchemaBuilder CreateTable<TModel>(
         this ISchemaBuilder builder,
         Action<ICreateTableCommand<TModel>> table) =>
-        builder.CreateTable(
+        builder?.CreateTable(
             typeof(TModel).Name,
             tableCommand => table?.Invoke(new CreateTableCommandShim<TModel>(tableCommand)));
 
     public static ISchemaBuilder AlterTable<TModel>(
         this ISchemaBuilder builder,
         Action<IAlterTableCommand<TModel>> table) =>
-        builder.AlterTable(
+        builder?.AlterTable(
             typeof(TModel).Name,
             tableCommand => table?.Invoke(new AlterTableCommandShim<TModel>(tableCommand)));
 }

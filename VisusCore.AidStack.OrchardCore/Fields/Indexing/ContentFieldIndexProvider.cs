@@ -24,7 +24,13 @@ public abstract class ContentFieldIndexProvider<TField, TIndex> : IndexProvider<
     protected ContentFieldIndexProvider(IServiceProvider serviceProvider) =>
         _serviceProvider = serviceProvider;
 
-    public override void Describe(DescribeContext<ContentItem> context) =>
+    public override void Describe(DescribeContext<ContentItem> context)
+    {
+        if (context is null)
+        {
+            throw new ArgumentNullException(nameof(context));
+        }
+
         context.For<TIndex>()
             .Map(contentItem =>
             {
@@ -73,6 +79,7 @@ public abstract class ContentFieldIndexProvider<TField, TIndex> : IndexProvider<
                     .GetContentFields<TField>(contentItem)
                     .Select(pair => CreateIndex(pair.Field, pair.Definition, contentItem));
             });
+    }
 
     protected abstract TIndex CreateIndex(TField field, ContentPartFieldDefinition definition, ContentItem contentItem);
 }

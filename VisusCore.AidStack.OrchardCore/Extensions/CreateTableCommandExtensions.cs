@@ -15,6 +15,16 @@ public static class CreateTableCommandExtensions
         Expression<Func<TModel, TProperty>> expression,
         Action<ICreateColumnCommand> createColumn = null)
     {
+        if (expression is null)
+        {
+            throw new ArgumentNullException(nameof(expression));
+        }
+
+        if (table is null)
+        {
+            throw new ArgumentNullException(nameof(table));
+        }
+
         var name = ((MemberExpression)expression.Body).Member.Name;
 
         return table.Column(name, typeof(TProperty), createColumn);

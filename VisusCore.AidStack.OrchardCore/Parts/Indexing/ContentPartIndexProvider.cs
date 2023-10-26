@@ -27,7 +27,15 @@ public abstract class ContentPartIndexProvider<TPart, TIndex> : ContentHandlerBa
 
     public Type ForType() => typeof(ContentItem);
 
-    public void Describe(IDescriptor context) => Describe((DescribeContext<ContentItem>)context);
+    public void Describe(IDescriptor context)
+    {
+        if (context is null)
+        {
+            throw new ArgumentNullException(nameof(context));
+        }
+
+        Describe(context as DescribeContext<ContentItem>);
+    }
 
     private void Describe(DescribeContext<ContentItem> context) =>
         context.For<TIndex>()
@@ -51,6 +59,11 @@ public abstract class ContentPartIndexProvider<TPart, TIndex> : ContentHandlerBa
 
     public override Task UpdatedAsync(UpdateContentContext context)
     {
+        if (context is null)
+        {
+            throw new ArgumentNullException(nameof(context));
+        }
+
         var part = context.ContentItem.As<TPart>();
 
         if (part is not null)

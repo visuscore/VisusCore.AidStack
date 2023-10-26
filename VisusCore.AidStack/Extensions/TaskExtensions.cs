@@ -16,7 +16,7 @@ public static class TaskExtensions
                 tasks.Where(task => !task.IsCompleted)
                     .Concat(new[] { stoppingTask }));
         }
-        while (!stoppingTask.IsCompleted);
+        while (stoppingTask?.IsCompleted is not false);
     }
 
     public static async Task AwaitEachAsync<TItem>(
@@ -24,6 +24,16 @@ public static class TaskExtensions
         Func<TItem, Task> asyncOperation,
         CancellationToken cancellationToken)
     {
+        if (source is null)
+        {
+            throw new ArgumentNullException(nameof(source));
+        }
+
+        if (asyncOperation is null)
+        {
+            throw new ArgumentNullException(nameof(asyncOperation));
+        }
+
         foreach (var item in source)
         {
             if (cancellationToken.IsCancellationRequested)
